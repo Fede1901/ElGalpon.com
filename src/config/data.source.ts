@@ -1,21 +1,16 @@
 import { DataSource, DataSourceOptions } from "typeorm";
-import * as dotenv from "dotenv";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import * as dotenv from "dotenv";
 
-dotenv.config({
-  path:
-    process.env.NODE_ENV !== undefined
-      ? `.${process.env.NODE_ENV.trim()}.env`
-      : ".env",
-});
+dotenv.config();
 
 const Config: DataSourceOptions = {
   type: "mysql",
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  host: "127.0.0.1", // Cambia esta línea al host de tu base de datos MySQL
+  port: 3306, // Cambia al puerto correcto de tu base de datos MySQL
+  username: "root", // Cambia al nombre de usuario de tu base de datos MySQL
+  password: "43279670", // Cambia a tu contraseña de base de datos MySQL
+  database: "proyecto_programacion", // Cambia al nombre de tu base de datos MySQL
   entities: [__dirname + "/../**/*.entity{.ts,.js}"],
   migrations: [__dirname + "/../migrations/*{.ts,.js}"],
   synchronize: false,

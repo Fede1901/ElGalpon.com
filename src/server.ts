@@ -9,7 +9,7 @@ import { DataSource } from "typeorm";
 
 class ServerBootstrap extends ConfigServer {
   public app: express.Application = express();
-  private port: number = this.getNumberEnv("PORT");
+  private port: number = 3000;
 
   constructor() {
     super();
@@ -22,25 +22,23 @@ class ServerBootstrap extends ConfigServer {
     this.app.set("view engine", "ejs");
     this.app.set("views", path.join(__dirname, "..", "views"));
     this.app.use(express.static(path.join(__dirname, "..", "public")));
-    // ruter
+    // Routers
     this.app.use("/", this.routers());
 
-    this.dbConnect();
-    this.listen();
+    this.initializeApp();
   }
 
   routers(): Array<express.Router> {
     return [new UserRouter().router];
   }
 
-  async dbConnect(): Promise<DataSource | void> {
-    return this.initConnect
-      .then(() => {
-        console.log("Connect db Success");
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  async initializeApp() {
+    try {
+      await this.initConnect;
+      this.listen();
+    } catch (error) {
+      console.error("Failed to initialize the application:", error);
+    }
   }
 
   public listen() {

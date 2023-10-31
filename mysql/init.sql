@@ -1,1 +1,1 @@
-CREATE DATABASE IF NOT EXISTS coder_db;
+CREATE DATABASE IF NOT EXISTS proyecto_programacion;

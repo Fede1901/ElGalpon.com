@@ -5,7 +5,10 @@ body {
 }
 
 .nav-icon {
-  width: 50px;
+  width: 100px;
+  height: 100px;
+  font-size: 30px;
+  margin-right: 10px;
 }
 
 .primary-btn {
