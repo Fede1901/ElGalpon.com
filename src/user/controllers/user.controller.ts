@@ -13,7 +13,7 @@ export class UserController {
     try {
       const users = await this.userService.findAllUser();
       if (users.length === 0) {
-        return this.httpResponse.NotFound(res, "No existe el datos");
+        return this.httpResponse.NotFound(res, "No existe el dato");
       }
       // this.httpResponse.Ok(res, users);
       res.render("users", { users });
@@ -31,7 +31,7 @@ export class UserController {
     try {
       const data = await this.userService.findUserById(id);
       if (!data) {
-        return this.httpResponse.NotFound(res, "No existe datos");
+        return this.httpResponse.NotFound(res, "No existe dato");
       }
       // return this.httpResponse.Ok(res, data);
       return res.render("edit", {
@@ -66,7 +66,7 @@ export class UserController {
       });
     } catch (err) {
       res.render("message", {
-        message: `Erro ao buscar usuário:`
+        message: `Error al buscar el usuario:`
       });
     }
   }

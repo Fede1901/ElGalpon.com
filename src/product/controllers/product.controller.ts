@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { ProductService } from "../services/product.service"; // Debes crear un servicio para gestionar la lógica de negocio de los productos.
+import { ProductService } from "../services/product.service"; 
 import { HttpResponse } from "../../shared/response/http.response";
 import { DeleteResult, UpdateResult } from "typeorm";
-import { ProductDTO } from "../dto/product.dto"; // Debes crear un DTO para validar y transformar los datos.
+import { ProductDTO } from "../dto/product.dto";
 
 export class ProductController {
   constructor(

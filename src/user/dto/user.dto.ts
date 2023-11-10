@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, isNotEmpty } from "class-validator";
+import { IsNotEmpty, IsNumber} from "class-validator";
 import { BaseDTO } from "../../config/base.dto";
 
 export class UserDTO extends BaseDTO {

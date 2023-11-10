@@ -17,7 +17,7 @@ export class UserService extends BaseService<UserEntity> {
 
   async search(search: string) {
     if (!search) {
-      throw new Error("Por favor preencha o campo de busca");
+      throw new Error("Por favor complete el campo de búsqueda");
     }
     const user = (await this.execRepository)
       .createQueryBuilder()
