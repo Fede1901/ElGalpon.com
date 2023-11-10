@@ -4,8 +4,11 @@ import morgan from "morgan";
 import cors from "cors";
 import path from "path";
 import { UserRouter } from "./user/user.router";
+import { ProductRouter } from "./product/product.router"; // Importa el router de productos
 import { ConfigServer } from "./config/config";
 import { DataSource } from "typeorm";
+import { CategoryRouter } from "./category/category.router";
+import { PurchaseProductRouter } from "./purchase/purchases-products.router";
 
 class ServerBootstrap extends ConfigServer {
   public app: express.Application = express();
@@ -29,7 +32,7 @@ class ServerBootstrap extends ConfigServer {
   }
 
   routers(): Array<express.Router> {
-    return [new UserRouter().router];
+    return [new UserRouter().router, new ProductRouter().router,new CategoryRouter().router, new ProductRouter().router,new PurchaseProductRouter().router]; // Agrega el router de productos
   }
 
   async initializeApp() {

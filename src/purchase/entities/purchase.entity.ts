@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
-import { BaseEntity } from "../config/base.entity";
+import { BaseEntity } from "../../config/base.entity";
 import { PurchaseProductEntity } from "./purchases-products.entity";
-import { CustomerEntity } from "../customer/customer.entity";
+import { UserEntity } from "../../user/entities/user.entity";
 
 @Entity({ name: "purchase" })
 export class PurchaseEntity extends BaseEntity {
@@ -11,9 +11,9 @@ export class PurchaseEntity extends BaseEntity {
   @Column()
   paymentMethod!: string;
 
-  @ManyToOne(() => CustomerEntity, (customer) => customer.purchases)
-  @JoinColumn({ name: "customer_id" })
-  customer!: CustomerEntity;
+  @ManyToOne(() => UserEntity, (user) => user.purchases)
+  @JoinColumn({ name: "user_id" })
+  user!: UserEntity;
 
   @OneToMany(
     () => PurchaseProductEntity,
