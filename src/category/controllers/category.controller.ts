@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CategoryService } from "../services/category.services";
 import { HttpResponse } from "../../shared/response/http.response";
 import { DeleteResult, UpdateResult } from "typeorm";
+import { Admin } from '../../middleware/admin.middleware';
 
 export class CategoryController {
   constructor(
@@ -41,6 +42,7 @@ export class CategoryController {
     }
   }
 
+  @Admin
   async createCategory(req: Request, res: Response) {
     try {
       const data = await this.categoryService.createCategory(req.body);
@@ -51,6 +53,7 @@ export class CategoryController {
     }
   }
 
+  @Admin
   async updateCategory(req: Request, res: Response) {
     // const { id } = req.params;
     const { id } = req.body;
@@ -68,7 +71,8 @@ export class CategoryController {
       return this.httpResponse.Error(res, e);
     }
   }
-
+  
+  @Admin
   async deleteCategory(req: Request, res: Response) {
     // const { id } = req.params;
     const { id } = req.body;

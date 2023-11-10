@@ -9,6 +9,7 @@ import { ConfigServer } from "./config/config";
 import { DataSource } from "typeorm";
 import { CategoryRouter } from "./category/category.router";
 import { PurchaseProductRouter } from "./purchase/purchases-products.router";
+import { AuthRouter } from "./user/auth.router";
 
 class ServerBootstrap extends ConfigServer {
   public app: express.Application = express();
@@ -35,7 +36,8 @@ class ServerBootstrap extends ConfigServer {
     return [new UserRouter().router,
             new ProductRouter().router,
             new CategoryRouter().router,
-            new PurchaseProductRouter().router];}
+            new PurchaseProductRouter().router,
+            new AuthRouter().router,];}
 
   async initializeApp() {
     try {

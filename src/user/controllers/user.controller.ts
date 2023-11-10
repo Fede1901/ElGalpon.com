@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { HttpResponse } from "../../shared/response/http.response";
 import { DeleteResult, UpdateResult } from "typeorm";
+import * as jwt from "jsonwebtoken";
+import { UserEntity } from "../entities/user.entity";
+
 
 export class UserController {
   constructor(
@@ -15,14 +18,11 @@ export class UserController {
       if (users.length === 0) {
         return this.httpResponse.NotFound(res, "No existe el dato");
       }
-      // this.httpResponse.Ok(res, users);
       res.render("users", { users });
     } catch (e) {
       return this.httpResponse.Error(res, e);
     }
   }
-
-
 
   async getUserById(req: Request, res: Response) {
     let { id } = req.query;
@@ -33,7 +33,6 @@ export class UserController {
       if (!data) {
         return this.httpResponse.NotFound(res, "No existe dato");
       }
-      // return this.httpResponse.Ok(res, data);
       return res.render("edit", {
         user: data,
       });
@@ -46,8 +45,26 @@ export class UserController {
   async createUser(req: Request, res: Response) {
     try {
       const data = await this.userService.createUser(req.body);
-      // return this.httpResponse.Ok(res, data);
       res.render("index");
+    } catch (e) {
+      return this.httpResponse.Error(res, e);
+    }
+  }
+
+  async registerUser(req: Request, res: Response) {
+    try {
+      const userData = req.body;
+
+      // Validar datos de usuario
+      // ...
+
+      // Llama al método registerUser en el servicio para manejar la lógica específica del registro
+      const newUser = await this.userService.registerUser(userData);
+
+      // Generar un token de sesión
+      const token = this.generateAuthToken(newUser);
+
+      return res.json({ message: 'Usuario registrado exitosamente', user: newUser, token });
     } catch (e) {
       return this.httpResponse.Error(res, e);
     }
@@ -56,7 +73,6 @@ export class UserController {
   async search(req: Request, res: Response) {
     let { search } = req.query;
     search = search?.toString() || "";
-
 
     try {
       const users = await this.userService.search(search);
@@ -72,7 +88,6 @@ export class UserController {
   }
 
   async updateUser(req: Request, res: Response) {
-    // const { id } = req.params;
     const { id } = req.body;
 
     try {
@@ -88,8 +103,8 @@ export class UserController {
       return this.httpResponse.Error(res, e);
     }
   }
+
   async deleteUser(req: Request, res: Response) {
-    // const { id } = req.params;
     const { id } = req.body;
 
     try {
@@ -97,11 +112,30 @@ export class UserController {
       if (!data.affected) {
         return this.httpResponse.NotFound(res, "Error al eliminar");
       }
-      // return this.httpResponse.Ok(res, data);
       res.render("index");
     } catch (e) {
       return this.httpResponse.Error(res, e);
     }
   }
 
+  // Método para generar un token de sesión
+  private generateAuthToken(user: UserEntity): string {
+    const token = jwt.sign({ id: user.id, username: user.username }, 'your-secret-key', {
+      expiresIn: '1h', // Cambia según tus necesidades
+    });
+    return token;
+  }
+
+  async login(req: Request, res: Response) {
+    try {
+      const { username, password } = req.body;
+
+      // Llama al método login en el servicio para manejar la lógica de inicio de sesión
+      const { user, token } = await this.userService.login(username, password);
+
+      return res.json({ message: 'Inicio de sesión exitoso', user, token });
+    } catch (e) {
+      return this.httpResponse.Error(res, e);
+    }
+  }
 }
