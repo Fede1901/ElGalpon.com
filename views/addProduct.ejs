@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Producto</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+
+</head>
+<body>
+    <nav>
+        <a href="/"> 
+            <a href="/"> 
+                <img src="/public/img/logo_wht.png" alt="Logo de El Galpón" class="logo">
+            </a>
+
+        </a>
+        <div class="barnav">
+            <ul>
+                <li><a href="category/cervezas">Cervezas</a></li>
+                <li><a href="category/gaseosas">Gaseosas</a></li>
+                <li><a href="category/vinos">Vinos</a></li>
+                <li><a href="category/bebidas blancas">Bebidas Blancas<a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section>
+       
+        <form action="/addProduct" method="post">
+            
+            <label for="productName">Nombre del producto:</label>
+            <input type="text" id="productName" name="productName" required>
+
+            <label for="productDescription">Descripción del producto:</label>
+            <textarea id="productDescription" name="productDescription" required></textarea>
+
+            <label for="productPrice">Precio del producto:</label>
+            <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+
+            
+            <label for="categoryId">Categoría:</label>
+            <select id="categoryId" name="categoryId" required>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.id %>"><%= category.categoryName %></option>
+                <% }); %>
+            </select>
+            
+            
+            <button type="submit">Añadir Producto</button>
+        </form>
+        
+    </section>
+</body>
+</html>

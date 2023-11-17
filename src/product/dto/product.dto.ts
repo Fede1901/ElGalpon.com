@@ -1,4 +1,4 @@
-import { IsString, IsNumber } from "class-validator";
+import { IsString, IsNumber, IsUUID } from "class-validator";
 import { BaseDTO } from "../../config/base.dto";
 
 export class ProductDTO extends BaseDTO {
@@ -11,4 +11,6 @@ export class ProductDTO extends BaseDTO {
   @IsNumber()
   price: number = 0;
 
+  @IsUUID()
+  categoryId: string = ""; 
 }

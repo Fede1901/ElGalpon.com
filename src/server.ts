@@ -3,13 +3,13 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import path from "path";
-import { UserRouter } from "./user/user.router";
 import { ProductRouter } from "./product/product.router"; 
 import { ConfigServer } from "./config/config";
 import { DataSource } from "typeorm";
 import { CategoryRouter } from "./category/category.router";
 import { PurchaseProductRouter } from "./purchase/purchases-products.router";
-import { AuthRouter } from "./user/auth.router";
+import { UserRouter } from "./user/user.router";
+import session from "express-session";
 
 class ServerBootstrap extends ConfigServer {
   public app: express.Application = express();
@@ -17,35 +17,62 @@ class ServerBootstrap extends ConfigServer {
 
   constructor() {
     super();
+    this.initializeApp();
+  }
+
+  async initializeApp() {
+    try {
+      // Asegurarse de que la conexión se inicializa correctamente
+      const dataSource = await this.initConnect;
+      
+      // Verificar si la conexión existe y es válida
+      if (dataSource.isConnected) {
+        console.log("Database connection established successfully.");
+        this.configureApp(dataSource);
+        this.listen();
+      } else {
+        throw new Error("Failed to establish database connection.");
+      }
+    } catch (error) {
+      console.error("Failed to initialize the application:", error);
+    }
+  }
+
+  configureApp(dataSource: DataSource) {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(morgan("dev"));
     this.app.use(cors());
+    this.app.use(session({
+      secret:"ekjnekjgne",
+      resave: false,
+      saveUninitialized: false,
+
+    }));
 
     // Establece EJS como el motor de vistas
     this.app.set("view engine", "ejs");
     this.app.set("views", path.join(__dirname, "..", "views"));
-    this.app.use(express.static(path.join(__dirname, "..", "public")));
+
+    // Middleware para imprimir las rutas
+    this.app.use((req, res, next) => {
+      console.log(`Request received for ${req.method} ${req.url}`);
+      next();
+    });
+
+    // Rutas estáticas
+    this.app.use("/public/css", express.static(path.join(__dirname, "..", "public", "css")));
+    this.app.use("/public/img", express.static(path.join(__dirname, "..", "public", "img")));
+
     // Routers
     this.app.use("/", this.routers());
-
-    this.initializeApp();
   }
 
   routers(): Array<express.Router> {
-    return [new UserRouter().router,
+    return [new CategoryRouter().router,
+            new UserRouter().router,
             new ProductRouter().router,
-            new CategoryRouter().router,
-            new PurchaseProductRouter().router,
-            new AuthRouter().router,];}
-
-  async initializeApp() {
-    try {
-      await this.initConnect;
-      this.listen();
-    } catch (error) {
-      console.error("Failed to initialize the application:", error);
-    }
+            new PurchaseProductRouter().router];
   }
 
   public listen() {

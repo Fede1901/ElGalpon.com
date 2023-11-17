@@ -1,16 +1,16 @@
-import express from "express";
-import { UserController } from "../user/controllers/user.controller"; 
+/* import { UserController } from "../user/controllers/user.controller";
+import { BaseRouter } from "../shared/router/router";
 
-export class AuthRouter {
-  public router: express.Router = express.Router();
-  private readonly controller: UserController = new UserController(); 
-
+export class AuthRouter extends BaseRouter<UserController> {
   constructor() {
-    this.initializeRoutes();
+    super(UserController);
   }
 
-  private initializeRoutes() {
-    this.router.post("/login", this.controller.login); // Agrega la ruta de inicio de sesión
-    this.router.post("/register", this.controller.registerUser); // Agrega la ruta de registro
+  routes(): void {
+    this.router.get("/auth/register", this.controller.renderRegister);
+    this.router.get("/auth/login", this.controller.renderLogin);
+    this.router.post("/auth/login", this.controller.login);
+    this.router.post("/auth/register", this.controller.registerUser);
   }
 }
+ */

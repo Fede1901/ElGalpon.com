@@ -20,3 +20,11 @@ const Config: DataSourceOptions = {
 };
 
 export const AppDataSource: DataSource = new DataSource(Config);
+
+AppDataSource.initialize()
+  .then((connection) => {
+    console.log("Database connection established successfully.");
+  })
+  .catch((error) => {
+    console.error("Failed to establish database connection:", error);
+  });

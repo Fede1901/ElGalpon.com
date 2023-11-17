@@ -1,0 +1,45 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - El Galpón</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">
+            <img src="/public/img/logo_wht.png" alt="Logo de El Galpón" class="logo">
+        </a>
+        <div class="barnav">
+            <ul>
+                <li><a href="category/cervezas">Cervezas</a></li>
+                <li><a href="category/gaseosas">Gaseosas</a></li>
+                <li><a href="category/vinos">Vinos</a></li>
+                <li><a href="category/bebidas blancas">Bebidas Blancas<a></li>
+            </ul>
+        </div>
+        <div class="auth-buttons">
+            <a href="/login">Iniciar Sesión</a>
+            <a href="/register">Registrarse</a>
+        </div>
+    </nav>
+
+    <section>
+        <h1>Iniciar Sesión</h1>
+        
+        
+        <form action="/login" method="post">
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+    </section>
+</body>
+</html>

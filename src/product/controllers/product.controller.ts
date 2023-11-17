@@ -3,8 +3,9 @@ import { ProductService } from "../services/product.service";
 import { HttpResponse } from "../../shared/response/http.response";
 import { DeleteResult, UpdateResult } from "typeorm";
 import { ProductDTO } from "../dto/product.dto";
-
+import {CategoryService} from "../../category/services/category.services"
 export class ProductController {
+  private readonly categoryService: CategoryService= new CategoryService()
   constructor(
     private readonly productService: ProductService = new ProductService(),
     private readonly httpResponse: HttpResponse = new HttpResponse()
@@ -14,9 +15,9 @@ export class ProductController {
     try {
       const products = await this.productService.findAllProducts();
       if (products.length === 0) {
-        return this.httpResponse.NotFound(res, "No existen productos.");
+        return res.render ("home",{products});
       }
-      return this.httpResponse.Ok(res, products);
+      return res.render("home", {products});
     } catch (e) {
       return this.httpResponse.Error(res, e);
     }
@@ -37,12 +38,22 @@ export class ProductController {
     }
   }
 
+  async getAddProductView(req: Request, res: Response) {
+    try {
+        const categories = await this.categoryService.findAllCategories(); 
+        return res.render("addProduct", { categories });
+    } catch (e) {
+        return this.httpResponse.Error(res, e);
+    }
+}
+
   async createProduct(req: Request, res: Response) {
     const productDTO: ProductDTO = req.body;
-
+    productDTO.description = req.body.productDescription;
+    productDTO.price = req.body.productPrice;
     try {
       const data = await this.productService.createProduct(productDTO);
-      return this.httpResponse.Ok(res, data);
+      return res.redirect("/");
     } catch (e) {
       return this.httpResponse.Error(res, e);
     }
@@ -76,4 +87,19 @@ export class ProductController {
       return this.httpResponse.Error(res, e);
     }
   }
+
+
+async getProductsByCategory(req: Request, res: Response) {
+  const { category } = req.params;
+
+  try {
+    // Obtener productos por categoría
+    const products = await this.productService.findProductsByCategory(category);
+
+    return res.render("productsByCategory", { products, category });
+  } catch (e) {
+    return this.httpResponse.Error(res, e);
+  }
+}
+
 }

@@ -8,6 +8,13 @@ export class ProductRouter extends BaseRouter<ProductController> {
 
   routes(): void {
     this.router.get("/", (req, res) => this.controller.getProducts(req, res));
+    this.router.get("/home", (req, res) => this.controller.getProducts(req, res));
+    this.router.get("/addProduct", async (req, res) => {
+      await this.controller.getAddProductView(req, res);});
+    this.router.post("/addProduct", (req, res) => this.controller.createProduct(req, res));
+    
+    this.router.get("/category/:category", (req, res) => this.controller.getProductsByCategory(req, res));
+
     this.router.get("/:id", (req, res) => this.controller.getProductById(req, res));
     this.router.post("/", (req, res) => this.controller.createProduct(req, res));
     this.router.put("/:id", (req, res) => this.controller.updateProduct(req, res));

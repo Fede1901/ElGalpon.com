@@ -1,9 +1,11 @@
 import * as dotenv from "dotenv";
-import { Connection, ConnectionOptions, DataSource, createConnection } from "typeorm";
+import { DataSource, DataSourceOptions, createConnection } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { AppDataSource } from "./data.source";
 
 export abstract class ConfigServer {
+  private static dataSource: DataSource | null = null;
+
   constructor() {
     const nodeNameEnv = this.createPathEnv(this.nodeEnv);
     dotenv.config({
@@ -33,11 +35,16 @@ export abstract class ConfigServer {
     return "." + arrEnv.join(".");
   }
 
-
-
   get initConnect(): Promise<DataSource> {
-    
-      return AppDataSource.initialize();
-   
+    if (ConfigServer.dataSource) {
+      // Si ya existe una conexión, devuélvela directamente.
+      return Promise.resolve(ConfigServer.dataSource);
+    }
+
+    // Si no hay una conexión, inicializa una y guárdala para futuros usos.
+    return AppDataSource.initialize().then((dataSource) => {
+      ConfigServer.dataSource = dataSource;
+      return dataSource;
+    });
   }
 }
